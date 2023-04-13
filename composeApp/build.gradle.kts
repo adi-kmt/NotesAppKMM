@@ -7,6 +7,7 @@ plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlinx.serialization)
     alias(libs.plugins.sqlDelight)
+    id("kotlin-parcelize")
 }
 
 kotlin {
@@ -59,6 +60,10 @@ kotlin {
                 implementation(libs.kotlinx.serialization.json)
                 implementation(libs.kotlinx.datetime)
                 implementation(libs.koin.core)
+                implementation(libs.sqlDelight.runtime)
+                implementation(libs.essenty.parcelable)
+                api(libs.decompose)
+                implementation(libs.decompose.extensions)
             }
         }
 
@@ -75,6 +80,8 @@ kotlin {
                 implementation(libs.compose.uitooling)
                 implementation(libs.kotlinx.coroutines.android)
                 implementation(libs.sqlDelight.driver.android)
+
+                api(libs.koin.android)
             }
         }
 
@@ -162,7 +169,7 @@ compose.experimental {
 
 sqldelight {
   databases {
-    create("MyDatabase") {
+    create("NotesDB") {
       // Database configuration here.
       // https://cashapp.github.io/sqldelight
       packageName.set("com.adikmt.notesapp.db")
