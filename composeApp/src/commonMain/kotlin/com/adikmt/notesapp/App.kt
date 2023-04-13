@@ -50,14 +50,5 @@ internal fun App() = AppTheme {
         ) {
             Text("Login")
         }
-
-        TextButton(
-            onClick = { openUrl("https://github.com/terrakok") },
-            modifier = Modifier.fillMaxWidth().padding(16.dp)
-        ) {
-            Text("Open github")
-        }
     }
 }
-
-internal expect fun openUrl(url: String?)
