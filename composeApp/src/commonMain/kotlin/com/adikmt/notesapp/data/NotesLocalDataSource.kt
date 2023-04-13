@@ -1,6 +1,5 @@
 package com.adikmt.notesapp.data
 
-import com.adikmt.notesapp.NotesDB
 import com.adikmt.notesapp.data.model.NoteDataModel
 import com.adikmt.notesapp.data.model.toNoteModel
 import com.adikmt.notesapp.utils.DateTimeUtil
