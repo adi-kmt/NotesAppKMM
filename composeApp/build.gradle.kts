@@ -172,7 +172,7 @@ sqldelight {
     create("NotesDB") {
       // Database configuration here.
       // https://cashapp.github.io/sqldelight
-      packageName.set("com.adikmt.notesapp.db")
+      packageName.set("com.adikmt.notesapp")
     }
   }
 }
