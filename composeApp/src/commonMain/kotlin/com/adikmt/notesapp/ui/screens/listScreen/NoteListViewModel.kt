@@ -4,13 +4,10 @@ import com.adikmt.notesapp.data.NoteLocalDataSource
 import com.adikmt.notesapp.data.model.NoteDataModel
 import com.adikmt.notesapp.ui.krouter.SavedStateHandle
 import com.adikmt.notesapp.ui.krouter.ViewModel
-import com.arkivanov.essenty.parcelable.Parcelable
-import com.arkivanov.essenty.parcelable.Parcelize
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.combine
-import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 import org.koin.core.component.KoinComponent
