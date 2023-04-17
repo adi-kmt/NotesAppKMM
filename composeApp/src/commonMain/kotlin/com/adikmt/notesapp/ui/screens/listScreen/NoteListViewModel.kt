@@ -16,7 +16,6 @@ import org.koin.core.component.get
 class NoteListViewModel(private val savedStateHandle: SavedStateHandle) : ViewModel(),
     KoinComponent {
 
-    //TODO Make mutable state flow with NoteList State
     private val notes: MutableStateFlow<List<NoteDataModel>> = MutableStateFlow(emptyList())
     private val searchText: MutableStateFlow<String> = MutableStateFlow("")
     private val isSearchActive: MutableStateFlow<Boolean> = MutableStateFlow(false)
@@ -48,6 +47,7 @@ class NoteListViewModel(private val savedStateHandle: SavedStateHandle) : ViewMo
         CoroutineScope(coroutineContext).launch {
             id?.let {
                 noteLocalDataSource.deleteNote(it)
+                notes.emit(noteLocalDataSource.getAllNotes())
             }
         }
     }

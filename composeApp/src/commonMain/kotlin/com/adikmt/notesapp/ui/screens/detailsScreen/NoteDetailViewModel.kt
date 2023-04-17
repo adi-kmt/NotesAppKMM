@@ -26,6 +26,8 @@ class NoteDetailViewModel(savedState: SavedStateHandle) : ViewModel(), KoinCompo
     private val _hasNoteBeenSaved = MutableStateFlow(false)
     val hasNoteBeenSaved = _hasNoteBeenSaved.asStateFlow()
 
+    val onBackMutableState = MutableStateFlow(false)
+
     private val noteLocalDataSource = get<NoteLocalDataSource>()
 
     val state by lazy {
@@ -83,16 +85,19 @@ class NoteDetailViewModel(savedState: SavedStateHandle) : ViewModel(), KoinCompo
 
     fun saveNote(noteId: Long?) {
         CoroutineScope(coroutineContext).launch {
-            noteLocalDataSource.insertNote(
-                NoteDataModel(
-                    id = noteId,
-                    title = title.value,
-                    content = content.value,
-                    colorHex = color.value,
-                    createdAt = DateTimeUtil.now()
+            if (title.value.checkNotEmptyOrBlank()) {
+                noteLocalDataSource.insertNote(
+                    NoteDataModel(
+                        id = noteId,
+                        title = title.value,
+                        content = content.value,
+                        colorHex = color.value,
+                        createdAt = DateTimeUtil.now()
+                    )
                 )
-            )
-            _hasNoteBeenSaved.value = true
+                _hasNoteBeenSaved.value = true
+            }
+            onBackMutableState.value = true
         }
     }
 }
@@ -104,3 +109,7 @@ data class NoteDetailState(
     val isContentHintVisible: Boolean = false,
     val color: Long = 0xFFFFFFFF
 )
+
+fun String.checkNotEmptyOrBlank(): Boolean {
+    return isNotEmpty() && isNotBlank()
+}

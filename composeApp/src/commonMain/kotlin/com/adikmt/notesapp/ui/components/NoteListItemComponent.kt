@@ -61,7 +61,7 @@ fun NoteListItemComponent(
                 contentDescription = "Delete Note",
                 modifier = Modifier
                     .clickable(MutableInteractionSource(), null) {
-                        onNoteDeleted()
+                        onNoteDeleted.invoke()
                     }
             )
         }

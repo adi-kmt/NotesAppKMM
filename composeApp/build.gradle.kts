@@ -35,7 +35,7 @@ kotlin {
         version = "1.0.0"
         summary = "Compose application framework"
         homepage = "empty"
-        ios.deploymentTarget = "11.0"
+        ios.deploymentTarget = "16.2"
         podfile = project.file("../iosApp/Podfile")
         framework {
             baseName = "ComposeApp"
@@ -64,7 +64,8 @@ kotlin {
                 implementation(libs.sqlDelight.runtime)
                 implementation(libs.essenty.parcelable)
                 api(libs.decompose)
-                implementation(libs.decompose.extensions)
+                implementation(libs.decompose.compose.multiplatform)
+//                implementation(libs.decompose.extensions)
             }
         }
 

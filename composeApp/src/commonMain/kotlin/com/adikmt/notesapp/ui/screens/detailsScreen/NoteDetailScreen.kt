@@ -39,13 +39,14 @@ fun NoteDetailScreen(noteId: Long?, onBack: () -> Unit) {
 
     val state by viewModel.state.collectAsState()
     val isSaved by viewModel.hasNoteBeenSaved.collectAsState()
+    val onBackClicked by viewModel.onBackMutableState.collectAsState()
 
     LaunchedEffect(Unit) {
         viewModel.getNote(noteId)
     }
 
-    LaunchedEffect(isSaved) {
-        if (isSaved) {
+    LaunchedEffect(isSaved, onBackClicked) {
+        if (isSaved || onBackClicked) {
             onBack.invoke()
         }
     }
