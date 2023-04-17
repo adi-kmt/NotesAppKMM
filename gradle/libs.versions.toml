@@ -11,9 +11,9 @@ kotlinx-serialization = "1.5.0"
 kotlinx-datetime = "0.4.0"
 koin = "3.4.0"
 sqlDelight = "2.0.0-alpha05"
-decompose = "2.0.0-compose-experimental-alpha-02"
+decompose = "2.0.0-alpha-02"
 essenty = "1.1.0"
-decompose-compose-experimental = "1.0.0-compose-experimental"
+decompose-compose-experimental = "2.0.0-compose-experimental-alpha-02"
 
 [libraries]
 
@@ -37,7 +37,7 @@ sqlDelight-driver-sqljs = { module = "app.cash.sqldelight:sqljs-driver", version
 sqlDelight_runtime = { module = "app.cash.sqldelight:runtime", version.ref = "sqlDelight" }
 
 decompose = { module = "com.arkivanov.decompose:decompose", version.ref = "decompose-compose-experimental" }
-decompose-compose-multiplatform = { module = "com.arkivanov.decompose:extensions-compose-jetbrains", version.ref = "decompose" }
+decompose-compose-multiplatform = { module = "com.arkivanov.decompose:extensions-compose-jetbrains", version.ref = "decompose-compose-experimental" }
 decompose_extensions = { module = "com.arkivanov.decompose:extensions-compose-jetbrains", version.ref = "decompose-compose-experimental" }
 essenty_parcelable = {module = "com.arkivanov.essenty:parcelable", version.ref = "essenty"}
 
