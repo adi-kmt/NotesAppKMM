@@ -19,11 +19,12 @@ kotlin {
         }
     }
 
-    jvm("desktop")
-
-    js {
-        browser()
-        binaries.executable()
+    jvm("desktop"){
+        compilations.all {
+            kotlinOptions {
+                jvmTarget = "1.8"
+            }
+        }
     }
 
     iosX64()
@@ -93,13 +94,6 @@ kotlin {
             }
         }
 
-        val jsMain by getting {
-            dependencies {
-                implementation(compose.web.core)
-                implementation(libs.sqlDelight.driver.sqljs)
-            }
-        }
-
         val iosX64Main by getting
         val iosArm64Main by getting
         val iosSimulatorArm64Main by getting
@@ -161,10 +155,6 @@ compose.desktop {
             packageVersion = "1.0.0"
         }
     }
-}
-
-compose.experimental {
-    web.application {}
 }
 
 sqldelight {

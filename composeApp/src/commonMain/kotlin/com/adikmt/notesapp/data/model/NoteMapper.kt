@@ -1,6 +1,7 @@
 package com.adikmt.notesapp.data.model
 
 
+import com.adikmt.notesapp.NoteEntity
 import kotlinx.datetime.Instant
 import kotlinx.datetime.TimeZone
 import kotlinx.datetime.toLocalDateTime

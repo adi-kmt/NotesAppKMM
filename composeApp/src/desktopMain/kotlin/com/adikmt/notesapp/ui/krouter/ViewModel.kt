@@ -8,6 +8,6 @@ import kotlinx.coroutines.cancel
 import kotlin.coroutines.CoroutineContext
 
 actual open class ViewModel : InstanceKeeper.Instance, CoroutineScope {
-  actual override val coroutineContext: CoroutineContext = Dispatchers.Main + SupervisorJob()
+  actual override val coroutineContext: CoroutineContext = Dispatchers.Unconfined + SupervisorJob()
   override fun onDestroy() { coroutineContext.cancel() }
 }
