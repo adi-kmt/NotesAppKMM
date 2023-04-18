@@ -16,58 +16,14 @@ import org.koin.core.component.KoinComponent
 import org.koin.core.component.get
 
 class NoteDetailViewModel(savedState: SavedStateHandle) : ViewModel(), KoinComponent {
-
-    private val title = MutableStateFlow("")
-    private val isTitleTextFocused = MutableStateFlow(false)
-    private val isContentTextFocused =
-        MutableStateFlow(false)
-    private val content = MutableStateFlow("")
-    private val color = MutableStateFlow(NoteDataModel.generateRandomColor())
     private val _hasNoteBeenSaved = MutableStateFlow(false)
     val hasNoteBeenSaved = _hasNoteBeenSaved.asStateFlow()
 
     val onBackMutableState = MutableStateFlow(false)
+    var noteMutableStateFlow =
+        MutableStateFlow(NoteDetailState())
 
     private val noteLocalDataSource = get<NoteLocalDataSource>()
-
-    val state by lazy {
-        combine(
-            title,
-            isTitleTextFocused,
-            content,
-            isContentTextFocused,
-            color
-        ) { title, isTitleTextFocused, content, isContentTextFocused, color ->
-            NoteDetailState(
-                title = title,
-                isTitleHintVisible = title.isEmpty() && !isTitleTextFocused,
-                content = content,
-                isContentHintVisible = content.isEmpty() && !isContentTextFocused,
-                color = color
-            )
-        }
-            .stateIn(
-                CoroutineScope(coroutineContext),
-                SharingStarted.WhileSubscribed(5000),
-                NoteDetailState()
-            )
-    }
-
-    fun onTitleChanged(text: String) {
-        title.value = text
-    }
-
-    fun onTitleFocusChanged(isFocused: Boolean) {
-        isTitleTextFocused.value = isFocused
-    }
-
-    fun onContentChanged(text: String) {
-        content.value = text
-    }
-
-    fun onContentFocusChanged(isFocused: Boolean) {
-        isContentTextFocused.value = isFocused
-    }
 
     fun getNote(noteId: Long?) {
         CoroutineScope(coroutineContext).launch {
@@ -75,23 +31,27 @@ class NoteDetailViewModel(savedState: SavedStateHandle) : ViewModel(), KoinCompo
                 val note = noteLocalDataSource.getNote(it)
 
                 note?.let {
-                    title.value = it.title
-                    content.value = it.content
-                    color.value = it.colorHex
+                    noteMutableStateFlow.emit(
+                        NoteDetailState(
+                            title = it.title,
+                            content = it.content,
+                            color = it.colorHex
+                        )
+                    )
                 }
             }
         }
     }
 
-    fun saveNote(noteId: Long?) {
+    fun saveNote(noteId: Long?, title: String, content: String) {
         CoroutineScope(coroutineContext).launch {
-            if (title.value.checkNotEmptyOrBlank()) {
+            if (title.checkNotEmptyOrBlank()) {
                 noteLocalDataSource.insertNote(
                     NoteDataModel(
                         id = noteId,
-                        title = title.value,
-                        content = content.value,
-                        colorHex = color.value,
+                        title = title,
+                        content = content,
+                        colorHex = getColour(noteId),
                         createdAt = DateTimeUtil.now()
                     )
                 )
@@ -100,13 +60,17 @@ class NoteDetailViewModel(savedState: SavedStateHandle) : ViewModel(), KoinCompo
             onBackMutableState.value = true
         }
     }
+
+    private fun getColour(noteId: Long?): Long {
+        return noteId?.let {
+            noteMutableStateFlow.value.color
+        } ?: NoteDataModel.generateRandomColor()
+    }
 }
 
 data class NoteDetailState(
     val title: String = "",
-    val isTitleHintVisible: Boolean = false,
     val content: String = "",
-    val isContentHintVisible: Boolean = false,
     val color: Long = 0xFFFFFFFF
 )
 

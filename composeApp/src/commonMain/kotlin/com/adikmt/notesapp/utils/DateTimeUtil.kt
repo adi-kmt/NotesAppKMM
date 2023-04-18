@@ -6,6 +6,9 @@ import kotlinx.datetime.TimeZone
 import kotlinx.datetime.toInstant
 import kotlinx.datetime.toLocalDateTime
 
+/**
+ * Mostly picked uo from Philip Lackner's KMM project
+ */
 object DateTimeUtil {
 
     fun now(): LocalDateTime {

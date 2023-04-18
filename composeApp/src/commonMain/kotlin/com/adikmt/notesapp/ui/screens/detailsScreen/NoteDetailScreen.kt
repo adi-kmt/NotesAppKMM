@@ -19,9 +19,13 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.adikmt.notesapp.data.model.NoteDataModel
@@ -36,8 +40,16 @@ fun NoteDetailScreen(noteId: Long?, onBack: () -> Unit) {
         rememberViewModel(NoteDetailViewModel::class) { savedState: SavedStateHandle ->
             NoteDetailViewModel(savedState)
         }
+    var stateTitle by remember {
+        mutableStateOf("")
+    }
 
-    val state by viewModel.state.collectAsState()
+    var stateContent by remember {
+        mutableStateOf("")
+    }
+
+    val noteDetailState by viewModel.noteMutableStateFlow.collectAsState()
+
     val isSaved by viewModel.hasNoteBeenSaved.collectAsState()
     val onBackClicked by viewModel.onBackMutableState.collectAsState()
 
@@ -55,7 +67,9 @@ fun NoteDetailScreen(noteId: Long?, onBack: () -> Unit) {
         floatingActionButton = {
             FloatingActionButton(
                 onClick = {
-                    viewModel.saveNote(noteId)
+                    if (!isSaved) {
+                        viewModel.saveNote(noteId, stateTitle, stateContent)
+                    }
                 },
                 backgroundColor = Color.Black,
             ) {
@@ -71,7 +85,7 @@ fun NoteDetailScreen(noteId: Long?, onBack: () -> Unit) {
                 IconButton(
                     onClick = {
                         if (!isSaved) {
-                            viewModel.saveNote(noteId)
+                            viewModel.saveNote(noteId, stateTitle, stateContent)
                         }
                     }
                 ) {
@@ -81,38 +95,35 @@ fun NoteDetailScreen(noteId: Long?, onBack: () -> Unit) {
                     )
                 }
 
-            })
+            }, backgroundColor = Color.White)
         }
     ) { padding ->
         Column(
             modifier = Modifier
-                .background(Color(state.color))
+                .background(Color(noteDetailState.color))
                 .fillMaxSize()
                 .padding(padding)
                 .padding(16.dp)
         ) {
             HeadingTextFieldComponent(
-                text = state.title,
+                text = if (stateTitle.checkNotEmptyOrBlank()) stateTitle else noteDetailState.title,
                 hint = "Enter a Title...",
-                isHintVisible = state.isTitleHintVisible,
-                onValueChanged = viewModel::onTitleChanged,
-                onFocusChanged = {
-                    viewModel.onTitleFocusChanged(it.isFocused)
+                onValueChanged = {
+                    stateTitle = it
                 },
                 isSingleLine = true,
                 textStyle = TextStyle(fontSize = 20.sp)
             )
             Spacer(modifier = Modifier.height(16.dp))
             HeadingTextFieldComponent(
-                text = state.content,
+                text = if (stateContent.checkNotEmptyOrBlank()) stateContent else noteDetailState.title,
                 hint = "Enter some content...",
-                isHintVisible = state.isContentHintVisible,
-                onValueChanged = viewModel::onContentChanged,
-                onFocusChanged = {
-                    viewModel.onContentFocusChanged(it.isFocused)
+                onValueChanged = {
+                    stateContent = it
                 },
                 textStyle = TextStyle(fontSize = 20.sp),
-                modifier = Modifier.weight(1f)
+                modifier = Modifier.weight(1f),
+                isSingleLine = false
             )
         }
     }

@@ -53,13 +53,17 @@ class NoteListViewModel(private val savedStateHandle: SavedStateHandle) : ViewMo
     }
 
     fun searchTextChanged(text: String) {
-        searchText.value = text
+        CoroutineScope(coroutineContext).launch {
+            searchText.value = text
+            notes.emit(noteLocalDataSource.searchNotes(text))
+        }
     }
 
     fun toggleSearchFocus() {
         this.isSearchActive.value = !isSearchActive.value
         if (!isSearchActive.value) {
             searchText.value = ""
+            getAllNotes()
         }
     }
 }

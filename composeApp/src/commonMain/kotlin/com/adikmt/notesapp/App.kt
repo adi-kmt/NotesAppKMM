@@ -19,5 +19,6 @@ import androidx.compose.ui.unit.dp
 import com.adikmt.notesapp.ui.screens.RootComponent
 
 @Composable
-internal fun App() =
+internal fun App() = AppTheme {
     RootComponent()
+}
