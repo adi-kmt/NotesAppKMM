@@ -4,6 +4,9 @@ import com.arkivanov.essenty.instancekeeper.InstanceKeeper
 import com.arkivanov.essenty.parcelable.Parcelable
 import com.arkivanov.essenty.parcelable.Parcelize
 
+/**
+ * From xxFast's Krouter library
+ */
 @Parcelize
 data class SavedState(val value: Parcelable): Parcelable
 

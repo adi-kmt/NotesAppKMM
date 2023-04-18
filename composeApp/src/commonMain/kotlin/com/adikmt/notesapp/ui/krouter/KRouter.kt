@@ -20,6 +20,10 @@ import com.arkivanov.essenty.parcelable.Parcelable
 import com.arkivanov.essenty.statekeeper.StateKeeper
 import kotlin.reflect.KClass
 
+/**
+ * From xxFast's Krouter library
+ */
+
 class Router<C : Parcelable>(
     private val navigator: StackNavigation<C>,
     val stack: State<ChildStack<C, ComponentContext>>,
