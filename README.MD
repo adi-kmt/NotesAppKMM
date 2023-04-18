@@ -15,6 +15,7 @@ Also large help from xxFast's (Krouter library)[https://github.com/xxfast/KRoute
 
 ### To build the SQL Delight Kotlin bindings
 Don't rebuild the project
+<br>
 <image src="https://media.giphy.com/media/g79am6uuZJKSc/giphy.gif" />
 
 Instead just run only the sqldelight tasks from the gradle tab 
