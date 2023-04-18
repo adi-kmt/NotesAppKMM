@@ -11,12 +11,15 @@ import androidx.compose.material.Icon
 import androidx.compose.material.IconButton
 import androidx.compose.material.OutlinedTextField
 import androidx.compose.material.Text
+import androidx.compose.material.TextFieldDefaults
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Close
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.unit.dp
 
 @Composable
@@ -37,8 +40,13 @@ internal fun SearchTextFieldComponent(
             OutlinedTextField(
                 value = text,
                 onValueChange = onTextChange,
-                shape = RoundedCornerShape(50.dp),
+                shape = RoundedCornerShape(30.dp),
                 placeholder = { Text(text = "Search") },
+                colors = TextFieldDefaults.textFieldColors(
+                    backgroundColor = Color.Transparent,
+                    focusedIndicatorColor = Color.Black,
+                    unfocusedIndicatorColor = Color.Black
+                ),
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(16.dp)

@@ -13,7 +13,13 @@ FROM NoteEntity;
 getNote:
 SELECT *
 FROM NoteEntity
-WHERE Id = ?;
+WHERE Id = :id;
+
+searchNotes:
+SELECT *
+FROM NoteEntity
+WHERE Title LIKE ("%" || :title)
+ OR Title LIKE (:title || "%");
 
 insertNote:
 INSERT OR REPLACE
@@ -23,8 +29,8 @@ INTO NoteEntity(
     Content,
     ColorHex,
     CreatedAt
-) VALUES(?, ?, ?, ?, ?);
+) VALUES(:id, :title, :content, :color, :created);
 
 deleteNote:
 DELETE FROM NoteEntity
-WHERE Id = ?;
+WHERE Id = :id;
