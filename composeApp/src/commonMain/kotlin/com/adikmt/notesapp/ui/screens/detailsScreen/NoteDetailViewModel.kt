@@ -61,7 +61,7 @@ class NoteDetailViewModel(savedState: SavedStateHandle) : ViewModel(), KoinCompo
         }
     }
 
-    private fun getColour(noteId: Long?): Long {
+    fun getColour(noteId: Long?): Long {
         return noteId?.let {
             noteMutableStateFlow.value.color
         } ?: NoteDataModel.generateRandomColor()

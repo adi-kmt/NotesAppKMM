@@ -40,6 +40,12 @@ fun NoteDetailScreen(noteId: Long?, onBack: () -> Unit) {
         rememberViewModel(NoteDetailViewModel::class) { savedState: SavedStateHandle ->
             NoteDetailViewModel(savedState)
         }
+
+    /**
+     * State stored here instead of the VM as the transfer of data was causing
+     * poor writing effort in the text fields
+     */
+
     var stateTitle by remember {
         mutableStateOf("")
     }
@@ -100,13 +106,16 @@ fun NoteDetailScreen(noteId: Long?, onBack: () -> Unit) {
     ) { padding ->
         Column(
             modifier = Modifier
-                .background(Color(noteDetailState.color))
+                .background(Color(viewModel.getColour(noteId)))
                 .fillMaxSize()
                 .padding(padding)
                 .padding(16.dp)
         ) {
             HeadingTextFieldComponent(
-                text = if (stateTitle.checkNotEmptyOrBlank()) stateTitle else noteDetailState.title,
+                text = if (stateTitle.checkNotEmptyOrBlank()) stateTitle else {
+                    stateTitle = noteDetailState.title
+                    noteDetailState.title
+                },
                 hint = "Enter a Title...",
                 onValueChanged = {
                     stateTitle = it
@@ -116,7 +125,10 @@ fun NoteDetailScreen(noteId: Long?, onBack: () -> Unit) {
             )
             Spacer(modifier = Modifier.height(16.dp))
             HeadingTextFieldComponent(
-                text = if (stateContent.checkNotEmptyOrBlank()) stateContent else noteDetailState.title,
+                text = if (stateContent.checkNotEmptyOrBlank()) stateContent else {
+                    stateContent = noteDetailState.content
+                    noteDetailState.content
+                },
                 hint = "Enter some content...",
                 onValueChanged = {
                     stateContent = it
