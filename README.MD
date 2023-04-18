@@ -15,7 +15,7 @@ Also large help from xxFast's (Krouter library)[https://github.com/xxfast/KRoute
 
 ### To build the SQL Delight Kotlin bindings
 Don't rebuild the project
-<br>
+<br><br>
 <image src="https://media.giphy.com/media/g79am6uuZJKSc/giphy.gif" />
 
 Instead just run only the sqldelight tasks from the gradle tab 
@@ -46,7 +46,6 @@ To run the application on iPhone device/simulator:
 | 💉 DI           | [Koin](https://insert-koin.io/)                                           |
 | 🧭 Navigation   | [Decompose](https://github.com/arkivanov/Decompose)                       |
 | ð Storage       | [SqlDelight](https://github.com/russhwolf/multiplatform-settings)         |
-| --------------- | ------------------------------------------------------------------------- |
 <p align="right">[<a href="#top">Back to top</a>]</p>
 
 
