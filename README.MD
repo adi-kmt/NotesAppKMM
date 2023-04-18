@@ -3,12 +3,12 @@ Simple Notes app built using 100% shared UI code with Jetpack Compose, SQL Delig
 data and Decompose + Essenty to manage navigation.
 
 ## Compose Template
-Used the compose template from [Compose Multiplatform Wizard][https://terrakok.github.io/Compose-Multiplatform-Wizard/].
+Used the compose template from [Compose Multiplatform Wizard](https://terrakok.github.io/Compose-Multiplatform-Wizard/)
 Thanks to them, project setup was considerably easier.
-Also large help from xxFast's [Krouter library][https://github.com/xxfast/KRouter]
+Also large help from xxFast's [Krouter library](https://github.com/xxfast/KRouter)
 
 ## Before running!
- - check your system with [KDoctor][https://github.com/Kotlin/kdoctor]
+ - check your system with [KDoctor](https://github.com/Kotlin/kdoctor)
  - install JDK 8 on your machine
  - add `local.properties` file to the project root and set a path to Android SDK there
  - run `./gradlew podInstall` in the project root
