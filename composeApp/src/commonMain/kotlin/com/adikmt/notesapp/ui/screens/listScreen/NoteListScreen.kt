@@ -33,16 +33,16 @@ import androidx.compose.ui.unit.sp
 import com.adikmt.notesapp.data.model.NoteDataModel
 import com.adikmt.notesapp.ui.components.NoteListItemComponent
 import com.adikmt.notesapp.ui.components.SearchTextFieldComponent
-import com.adikmt.notesapp.ui.krouter.SavedStateHandle
 import com.adikmt.notesapp.ui.krouter.rememberViewModel
 
 @Composable
 fun NoteListScreen(
-    onAddOrItemClicked: (NoteDataModel?) -> Unit
+    onAddOrItemClicked: (NoteDataModel?) -> Unit,
+    modifier: Modifier = Modifier,
 ) {
     val viewModel: NoteListViewModel =
-        rememberViewModel(NoteListViewModel::class) { savedState: SavedStateHandle ->
-            NoteListViewModel(savedState)
+        rememberViewModel(NoteListViewModel::class) {
+            NoteListViewModel()
         }
 
     val state by viewModel.states.collectAsState()
@@ -52,57 +52,65 @@ fun NoteListScreen(
     }
 
     Scaffold(
+        modifier = modifier,
         floatingActionButton = {
             FloatingActionButton(
                 onClick = {
                     onAddOrItemClicked(null)
                 },
                 backgroundColor = if (isSystemInDarkTheme()) Color.Black else Color.White,
-            ) {
-                Icon(
-                    imageVector = Icons.Default.Add,
-                    contentDescription = "Add Note",
-                    tint = Color.Black
-                )
-            }
+                content = {
+                    Icon(
+                        imageVector = Icons.Default.Add,
+                        contentDescription = "Add Note",
+                        tint = Color.Black,
+                    )
+                },
+            )
         },
     ) { padding ->
         Column(
             modifier = Modifier
                 .fillMaxSize()
-                .padding(padding)
+                .padding(padding),
         ) {
             Box(
                 modifier = Modifier.fillMaxWidth(),
-                contentAlignment = Alignment.Center
+                contentAlignment = Alignment.Center,
             ) {
                 SearchTextFieldComponent(
                     text = state.searchText,
-                    modifier = Modifier.fillMaxWidth().height(100.dp),
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .height(100.dp),
                     onTextChange = viewModel::searchTextChanged,
                     isSearchActive = state.isSearchActive,
                     onSearchClick = viewModel::toggleSearchFocus,
-                    onCloseClick = viewModel::toggleSearchFocus
+                    onCloseClick = viewModel::toggleSearchFocus,
                 )
                 this@Column.AnimatedVisibility(
                     visible = !state.isSearchActive,
                     enter = fadeIn(),
-                    exit = fadeOut()
+                    exit = fadeOut(),
                 ) {
-                    Text("All Notes", fontSize = 30.sp, fontWeight = FontWeight.Bold)
+                    Text(
+                        text = "All Notes",
+                        fontSize = 30.sp,
+                        fontWeight = FontWeight.Bold,
+                    )
                 }
             }
             LazyVerticalGrid(
                 columns = GridCells.Adaptive(128.dp),
                 verticalArrangement = Arrangement.spacedBy(8.dp),
                 horizontalArrangement = Arrangement.spacedBy(8.dp),
-                modifier = Modifier.padding(8.dp)
+                modifier = Modifier.padding(8.dp),
             ) {
                 items(state.notes) { note ->
                     NoteListItemComponent(
                         noteDataModel = note,
                         onNoteClick = { onAddOrItemClicked.invoke(note) },
-                        onNoteDeleted = { viewModel.deleteNote(note.id) }
+                        onNoteDeleted = { viewModel.deleteNote(note.id) },
                     )
                 }
             }

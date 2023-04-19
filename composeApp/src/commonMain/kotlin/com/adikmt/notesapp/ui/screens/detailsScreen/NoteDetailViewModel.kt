@@ -2,20 +2,16 @@ package com.adikmt.notesapp.ui.screens.detailsScreen
 
 import com.adikmt.notesapp.data.NoteLocalDataSource
 import com.adikmt.notesapp.data.model.NoteDataModel
-import com.adikmt.notesapp.ui.krouter.SavedStateHandle
 import com.adikmt.notesapp.ui.krouter.ViewModel
 import com.adikmt.notesapp.utils.DateTimeUtil
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.flow.combine
-import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.get
 
-class NoteDetailViewModel(savedState: SavedStateHandle) : ViewModel(), KoinComponent {
+class NoteDetailViewModel : ViewModel(), KoinComponent {
     private val _hasNoteBeenSaved = MutableStateFlow(false)
     val hasNoteBeenSaved = _hasNoteBeenSaved.asStateFlow()
 
@@ -30,20 +26,24 @@ class NoteDetailViewModel(savedState: SavedStateHandle) : ViewModel(), KoinCompo
             noteId?.let {
                 val note = noteLocalDataSource.getNote(it)
 
-                note?.let {
+                note?.let { nnNote ->
                     noteMutableStateFlow.emit(
                         NoteDetailState(
-                            title = it.title,
-                            content = it.content,
-                            color = it.colorHex
-                        )
+                            title = nnNote.title,
+                            content = nnNote.content,
+                            color = nnNote.colorHex,
+                        ),
                     )
                 }
             }
         }
     }
 
-    fun saveNote(noteId: Long?, title: String, content: String) {
+    fun saveNote(
+        noteId: Long?,
+        title: String,
+        content: String,
+    ) {
         CoroutineScope(coroutineContext).launch {
             if (title.checkNotEmptyOrBlank()) {
                 noteLocalDataSource.insertNote(
@@ -52,8 +52,8 @@ class NoteDetailViewModel(savedState: SavedStateHandle) : ViewModel(), KoinCompo
                         title = title,
                         content = content,
                         colorHex = getColour(noteId),
-                        createdAt = DateTimeUtil.now()
-                    )
+                        createdAt = DateTimeUtil.now(),
+                    ),
                 )
                 _hasNoteBeenSaved.value = true
             }
@@ -71,7 +71,7 @@ class NoteDetailViewModel(savedState: SavedStateHandle) : ViewModel(), KoinCompo
 data class NoteDetailState(
     val title: String = "",
     val content: String = "",
-    val color: Long = 0xFFFFFFFF
+    val color: Long = 0xFFFFFFFF,
 )
 
 fun String.checkNotEmptyOrBlank(): Boolean {

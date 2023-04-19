@@ -2,7 +2,6 @@ package com.adikmt.notesapp.ui.screens.listScreen
 
 import com.adikmt.notesapp.data.NoteLocalDataSource
 import com.adikmt.notesapp.data.model.NoteDataModel
-import com.adikmt.notesapp.ui.krouter.SavedStateHandle
 import com.adikmt.notesapp.ui.krouter.ViewModel
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -13,8 +12,7 @@ import kotlinx.coroutines.launch
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.get
 
-class NoteListViewModel(private val savedStateHandle: SavedStateHandle) : ViewModel(),
-    KoinComponent {
+class NoteListViewModel : ViewModel(), KoinComponent {
 
     private val notes: MutableStateFlow<List<NoteDataModel>> = MutableStateFlow(emptyList())
     private val searchText: MutableStateFlow<String> = MutableStateFlow("")
@@ -27,13 +25,13 @@ class NoteListViewModel(private val savedStateHandle: SavedStateHandle) : ViewMo
             NoteListState(
                 notes = notes,
                 searchText = searchText,
-                isSearchActive = isSearchActive
+                isSearchActive = isSearchActive,
             )
         }
             .stateIn(
                 CoroutineScope(coroutineContext),
                 SharingStarted.WhileSubscribed(5000),
-                NoteListState()
+                NoteListState(),
             )
     }
 
@@ -71,5 +69,5 @@ class NoteListViewModel(private val savedStateHandle: SavedStateHandle) : ViewMo
 data class NoteListState(
     val notes: List<NoteDataModel> = emptyList(),
     val searchText: String = "",
-    val isSearchActive: Boolean = false
+    val isSearchActive: Boolean = false,
 )

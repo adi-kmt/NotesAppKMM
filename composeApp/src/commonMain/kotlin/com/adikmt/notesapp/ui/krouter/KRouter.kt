@@ -36,12 +36,12 @@ val LocalRouter: ProvidableCompositionLocal<Router<*>?> =
 fun <C : Parcelable> rememberRouter(
     type: KClass<C>,
     stack: List<C>,
-    handleBackButton: Boolean = true
+    handleBackButton: Boolean = true,
 ): Router<C> {
     val navigator: StackNavigation<C> = remember { StackNavigation() }
 
     val packageName: String =
-        requireNotNull(type.simpleName) { "Unable to retain anonymous instance of $type"}
+        requireNotNull(type.simpleName) { "Unable to retain anonymous instance of $type" }
 
     val childStackState: State<ChildStack<C, ComponentContext>> = rememberChildStack(
         source = navigator,
@@ -78,20 +78,27 @@ fun <C : Parcelable> RoutedContent(
 @Composable
 fun <T : ViewModel> rememberViewModel(
     viewModelClass: KClass<T>,
-    block: @DisallowComposableCalls (savedState: SavedStateHandle) -> T
+    block: @DisallowComposableCalls (savedState: SavedStateHandle) -> T,
 ): T {
     val component: ComponentContext = LocalComponentContext.current
     val stateKeeper: StateKeeper = component.stateKeeper
     val instanceKeeper: InstanceKeeper = component.instanceKeeper
 
     val packageName: String =
-        requireNotNull(viewModelClass.simpleName) { "Unable to retain anonymous instance of $viewModelClass"}
+        requireNotNull(viewModelClass.simpleName) { "Unable to retain anonymous instance of $viewModelClass" }
     val viewModelKey = "$packageName.viewModel"
     val stateKey = "$packageName.savedState"
 
     val (viewModel, savedState) = remember(viewModelClass) {
         val savedState: SavedStateHandle = instanceKeeper
-            .getOrCreate(stateKey) { SavedStateHandle(stateKeeper.consume(stateKey, SavedState::class)) }
+            .getOrCreate(stateKey) {
+                SavedStateHandle(
+                    stateKeeper.consume(
+                        stateKey,
+                        SavedState::class,
+                    ),
+                )
+            }
         var viewModel: T? = instanceKeeper.get(viewModelKey) as T?
         if (viewModel == null) {
             viewModel = block(savedState)
@@ -101,8 +108,9 @@ fun <T : ViewModel> rememberViewModel(
     }
 
     LaunchedEffect(Unit) {
-        if (!stateKeeper.isRegistered(stateKey))
+        if (!stateKeeper.isRegistered(stateKey)) {
             stateKeeper.register(stateKey) { savedState.value }
+        }
     }
 
     return viewModel

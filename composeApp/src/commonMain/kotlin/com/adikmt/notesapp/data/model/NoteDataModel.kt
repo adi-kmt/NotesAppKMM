@@ -12,7 +12,7 @@ data class NoteDataModel(
     val title: String,
     val content: String,
     val colorHex: Long,
-    val createdAt: LocalDateTime
+    val createdAt: LocalDateTime,
 ) {
     companion object {
         private val colors = listOf(RedOrangeHex, RedPinkHex, BabyBlueHex, VioletHex, LightGreenHex)

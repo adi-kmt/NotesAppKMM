@@ -23,24 +23,27 @@ fun RootComponent() {
     MyApplicationTheme {
         RoutedContent(
             router = router,
-            animation = stackAnimation(slide())
-        ) { screen ->
-            when (screen) {
-                is RootStateModel.NoteDetails -> NoteDetailScreen(
-                    noteId = screen.noteId,
-                    onBack = { router.pop() })
+            animation = stackAnimation(animator = slide()),
+            content = { screen ->
+                when (screen) {
+                    is RootStateModel.NoteDetails -> NoteDetailScreen(
+                        noteId = screen.noteId,
+                        onBack = { router.pop() },
+                    )
 
-                RootStateModel.NoteList -> NoteListScreen(onAddOrItemClicked = { noteDataModel: NoteDataModel? ->
-                    router.push(RootStateModel.NoteDetails(noteDataModel?.id))
-                })
-            }
-        }
+                    RootStateModel.NoteList -> NoteListScreen(
+                        onAddOrItemClicked = { noteDataModel: NoteDataModel? ->
+                            router.push(RootStateModel.NoteDetails(noteDataModel?.id))
+                        },
+                    )
+                }
+            },
+        )
     }
 }
 
 @Parcelize
 sealed class RootStateModel : Parcelable {
     object NoteList : RootStateModel()
-
     data class NoteDetails(val noteId: Long?) : RootStateModel()
 }

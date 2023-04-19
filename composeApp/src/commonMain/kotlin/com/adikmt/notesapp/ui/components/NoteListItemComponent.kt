@@ -30,10 +30,10 @@ import com.adikmt.notesapp.utils.DateTimeUtil
 @Composable
 fun NoteListItemComponent(
     noteDataModel: NoteDataModel,
-    maxLines: Int = 5,
-    modifier: Modifier = Modifier,
     onNoteClick: () -> Unit,
-    onNoteDeleted: () -> Unit
+    onNoteDeleted: () -> Unit,
+    modifier: Modifier = Modifier,
+    maxLines: Int = 5,
 ) {
     val formattedDate = remember(noteDataModel.createdAt) {
         DateTimeUtil.formatNoteDate(noteDataModel.createdAt)
@@ -44,17 +44,17 @@ fun NoteListItemComponent(
             .clip(RoundedCornerShape(8.dp))
             .background(Color(noteDataModel.colorHex))
             .clickable { onNoteClick.invoke() }
-            .padding(20.dp)
+            .padding(20.dp),
     ) {
         Row(
             horizontalArrangement = Arrangement.SpaceBetween,
             verticalAlignment = Alignment.CenterVertically,
-            modifier = Modifier.fillMaxWidth()
+            modifier = Modifier.fillMaxWidth(),
         ) {
             Text(
                 text = noteDataModel.title,
                 fontWeight = FontWeight.Bold,
-                fontSize = 20.sp
+                fontSize = 20.sp,
             )
             Icon(
                 imageVector = Icons.Default.Close,
@@ -62,21 +62,25 @@ fun NoteListItemComponent(
                 modifier = Modifier
                     .clickable(MutableInteractionSource(), null) {
                         onNoteDeleted.invoke()
-                    }
+                    },
             )
         }
+
         Spacer(modifier = Modifier.height(16.dp))
+
         Text(
             text = noteDataModel.content,
             fontWeight = FontWeight.Normal,
             maxLines = maxLines,
-            fontSize = 14.sp
+            fontSize = 14.sp,
         )
+
         Spacer(modifier = Modifier.height(16.dp))
+
         Text(
             text = formattedDate,
             color = Color.DarkGray,
-            modifier = Modifier.align(Alignment.End)
+            modifier = Modifier.align(Alignment.End),
         )
     }
 }
