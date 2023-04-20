@@ -3,17 +3,14 @@ package com.adikmt.notesapp.ui.screens.listScreen
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
+import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.isSystemInDarkTheme
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.lazy.grid.GridCells
-import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
-import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.material.FloatingActionButton
 import androidx.compose.material.Icon
 import androidx.compose.material.Scaffold
@@ -33,8 +30,10 @@ import androidx.compose.ui.unit.sp
 import com.adikmt.notesapp.data.model.NoteDataModel
 import com.adikmt.notesapp.ui.components.NoteListItemComponent
 import com.adikmt.notesapp.ui.components.SearchTextFieldComponent
+import com.adikmt.notesapp.ui.components.VerticalStaggeredGrid
 import com.adikmt.notesapp.ui.krouter.rememberViewModel
 
+@OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun NoteListScreen(
     onAddOrItemClicked: (NoteDataModel?) -> Unit,
@@ -101,20 +100,20 @@ fun NoteListScreen(
                     )
                 }
             }
-            LazyVerticalGrid(
-                columns = GridCells.Adaptive(128.dp),
-                verticalArrangement = Arrangement.spacedBy(8.dp),
-                horizontalArrangement = Arrangement.spacedBy(8.dp),
+
+            VerticalStaggeredGrid(
                 modifier = Modifier.padding(8.dp),
-            ) {
-                items(noteListState.notes) { note ->
-                    NoteListItemComponent(
-                        noteDataModel = note,
-                        onNoteClick = { onAddOrItemClicked.invoke(note) },
-                        onNoteDeleted = { viewModel.deleteNote(note.id) },
-                    )
-                }
-            }
+                content = {
+                    noteListState.notes.forEach { note ->
+                        NoteListItemComponent(
+                            noteDataModel = note,
+                            onNoteClick = { onAddOrItemClicked.invoke(note) },
+                            onNoteDeleted = { viewModel.deleteNote(note.id) },
+                            modifier = modifier.padding(4.dp),
+                        )
+                    }
+                },
+            )
         }
     }
 }
