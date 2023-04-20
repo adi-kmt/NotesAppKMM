@@ -11,15 +11,15 @@ import androidx.compose.ui.text.TextStyle
 
 @Composable
 fun HeadingTextFieldComponent(
-    text: String,
-    hint: String,
+    value: String,
     onValueChanged: (String) -> Unit,
+    hint: String,
     textStyle: TextStyle,
     modifier: Modifier = Modifier,
     isSingleLine: Boolean = true,
 ) {
     TextField(
-        value = text,
+        value = value,
         colors = TextFieldDefaults.textFieldColors(
             backgroundColor = Color.Transparent,
             focusedIndicatorColor = Color.Transparent,

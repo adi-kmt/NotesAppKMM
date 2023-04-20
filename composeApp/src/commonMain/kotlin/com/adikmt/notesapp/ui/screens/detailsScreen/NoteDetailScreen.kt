@@ -44,21 +44,25 @@ fun NoteDetailScreen(
      * poor writing effort in the text fields
      */
 
-    var stateTitle by remember {
-        mutableStateOf("")
-    }
-
-    var stateContent by remember {
-        mutableStateOf("")
-    }
-
     val noteDetailState by viewModel.noteMutableStateFlow.collectAsState()
-
     val isSaved by viewModel.hasNoteBeenSaved.collectAsState()
     val onBackClicked by viewModel.onBackMutableState.collectAsState()
 
+    var stateTitle by remember {
+        mutableStateOf(noteDetailState.title)
+    }
+
+    var stateContent by remember {
+        mutableStateOf(noteDetailState.content)
+    }
+
     LaunchedEffect(Unit) {
         viewModel.getNote(noteId)
+    }
+
+    LaunchedEffect(noteDetailState) {
+        stateTitle = noteDetailState.title
+        stateContent = noteDetailState.content
     }
 
     LaunchedEffect(isSaved, onBackClicked) {
@@ -117,19 +121,14 @@ fun NoteDetailScreen(
     ) { padding ->
         Column(
             modifier = Modifier
-                .background(Color(viewModel.getColour(noteId)))
+                .background(Color(noteDetailState.color))
                 .fillMaxSize()
                 .padding(padding)
                 .padding(16.dp),
         ) {
             HeadingTextFieldComponent(
-                text = if (stateTitle.checkNotEmptyOrBlank()) {
-                    stateTitle
-                } else {
-                    stateTitle = noteDetailState.title
-                    noteDetailState.title
-                },
                 hint = "Enter a Title...",
+                value = stateTitle,
                 onValueChanged = {
                     stateTitle = it
                 },
@@ -140,12 +139,7 @@ fun NoteDetailScreen(
             Spacer(modifier = Modifier.height(16.dp))
 
             HeadingTextFieldComponent(
-                text = if (stateContent.checkNotEmptyOrBlank()) {
-                    stateContent
-                } else {
-                    stateContent = noteDetailState.content
-                    noteDetailState.content
-                },
+                value = stateContent,
                 hint = "Enter some content...",
                 onValueChanged = {
                     stateContent = it

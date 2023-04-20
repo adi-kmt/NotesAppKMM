@@ -45,7 +45,8 @@ fun NoteListScreen(
             NoteListViewModel()
         }
 
-    val state by viewModel.states.collectAsState()
+    val noteListState by viewModel.noteListStateFlow.collectAsState()
+    val isSearchActive by viewModel.isSearchActive.collectAsState()
 
     LaunchedEffect(true) {
         viewModel.getAllNotes()
@@ -79,17 +80,17 @@ fun NoteListScreen(
                 contentAlignment = Alignment.Center,
             ) {
                 SearchTextFieldComponent(
-                    text = state.searchText,
+                    text = noteListState.searchText,
                     modifier = Modifier
                         .fillMaxWidth()
                         .height(100.dp),
                     onTextChange = viewModel::searchTextChanged,
-                    isSearchActive = state.isSearchActive,
+                    isSearchActive = isSearchActive,
                     onSearchClick = viewModel::toggleSearchFocus,
                     onCloseClick = viewModel::toggleSearchFocus,
                 )
                 this@Column.AnimatedVisibility(
-                    visible = !state.isSearchActive,
+                    visible = !isSearchActive,
                     enter = fadeIn(),
                     exit = fadeOut(),
                 ) {
@@ -106,7 +107,7 @@ fun NoteListScreen(
                 horizontalArrangement = Arrangement.spacedBy(8.dp),
                 modifier = Modifier.padding(8.dp),
             ) {
-                items(state.notes) { note ->
+                items(noteListState.notes) { note ->
                     NoteListItemComponent(
                         noteDataModel = note,
                         onNoteClick = { onAddOrItemClicked.invoke(note) },
