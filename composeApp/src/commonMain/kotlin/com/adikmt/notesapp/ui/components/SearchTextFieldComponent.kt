@@ -19,23 +19,22 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.unit.dp
 
 @Composable
 internal fun SearchTextFieldComponent(
     text: String,
-    modifier: Modifier = Modifier,
     onTextChange: (String) -> Unit,
     isSearchActive: Boolean,
     onSearchClick: () -> Unit,
-    onCloseClick: () -> Unit
+    onCloseClick: () -> Unit,
+    modifier: Modifier = Modifier,
 ) {
     Box(modifier = modifier) {
         AnimatedVisibility(
             visible = isSearchActive,
             enter = fadeIn(),
-            exit = fadeOut()
+            exit = fadeOut(),
         ) {
             OutlinedTextField(
                 value = text,
@@ -45,26 +44,29 @@ internal fun SearchTextFieldComponent(
                 colors = TextFieldDefaults.textFieldColors(
                     backgroundColor = Color.Transparent,
                     focusedIndicatorColor = Color.Black,
-                    unfocusedIndicatorColor = Color.Black
+                    unfocusedIndicatorColor = Color.Black,
                 ),
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(16.dp)
-                    .padding(end = 40.dp)
+                    .padding(end = 40.dp),
             )
         }
         AnimatedVisibility(
             visible = isSearchActive,
             enter = fadeIn(),
             exit = fadeOut(),
-            modifier = Modifier.align(Alignment.CenterEnd)
+            modifier = Modifier.align(Alignment.CenterEnd),
         ) {
-            IconButton(onClick = onCloseClick) {
-                Icon(
-                    imageVector = Icons.Default.Close,
-                    contentDescription = "Close Search"
-                )
-            }
+            IconButton(
+                onClick = onCloseClick,
+                content = {
+                    Icon(
+                        imageVector = Icons.Default.Close,
+                        contentDescription = "Close Search",
+                    )
+                },
+            )
         }
         AnimatedVisibility(
             visible = !isSearchActive,
@@ -72,12 +74,15 @@ internal fun SearchTextFieldComponent(
             exit = fadeOut(),
             modifier = Modifier.align(Alignment.CenterEnd),
         ) {
-            IconButton(onClick = onSearchClick) {
-                Icon(
-                    imageVector = Icons.Default.Search,
-                    contentDescription = "Open Search"
-                )
-            }
+            IconButton(
+                onClick = onSearchClick,
+                content = {
+                    Icon(
+                        imageVector = Icons.Default.Search,
+                        contentDescription = "Open Search",
+                    )
+                },
+            )
         }
     }
 }

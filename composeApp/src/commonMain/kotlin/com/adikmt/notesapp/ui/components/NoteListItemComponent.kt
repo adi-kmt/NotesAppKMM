@@ -70,7 +70,9 @@ fun NoteListItemComponent(
                     .weight(0.3f)
             )
         }
+
         Spacer(modifier = Modifier.height(16.dp))
+
         Text(
             text = noteDataModel.content,
             fontWeight = FontWeight.Normal,
@@ -78,7 +80,9 @@ fun NoteListItemComponent(
             fontSize = 14.sp,
             overflow = TextOverflow.Ellipsis
         )
+
         Spacer(modifier = Modifier.height(16.dp))
+
         Text(
             text = formattedDate,
             color = Color.DarkGray,

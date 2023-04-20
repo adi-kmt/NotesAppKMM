@@ -5,6 +5,7 @@ import com.adikmt.notesapp.ui.theme.LightGreenHex
 import com.adikmt.notesapp.ui.theme.RedOrangeHex
 import com.adikmt.notesapp.ui.theme.RedPinkHex
 import com.adikmt.notesapp.ui.theme.VioletHex
+import com.adikmt.notesapp.utils.DateTimeUtil
 import kotlinx.datetime.LocalDateTime
 
 data class NoteDataModel(
@@ -12,7 +13,7 @@ data class NoteDataModel(
     val title: String,
     val content: String,
     val colorHex: Long,
-    val createdAt: LocalDateTime
+    val createdAt: LocalDateTime = DateTimeUtil.now(),
 ) {
     companion object {
         private val colors = listOf(RedOrangeHex, RedPinkHex, BabyBlueHex, VioletHex, LightGreenHex)

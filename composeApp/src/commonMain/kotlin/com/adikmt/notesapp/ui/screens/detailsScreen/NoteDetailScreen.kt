@@ -25,42 +25,44 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.TextStyle
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.adikmt.notesapp.data.model.NoteDataModel
 import com.adikmt.notesapp.ui.components.HeadingTextFieldComponent
-import com.adikmt.notesapp.ui.krouter.SavedStateHandle
 import com.adikmt.notesapp.ui.krouter.rememberViewModel
-import com.arkivanov.essenty.backhandler.BackHandler
 
 @Composable
-fun NoteDetailScreen(noteId: Long?, onBack: () -> Unit) {
+fun NoteDetailScreen(
+    noteId: Long?,
+    onBack: () -> Unit,
+    modifier: Modifier = Modifier,
+) {
     val viewModel: NoteDetailViewModel =
-        rememberViewModel(NoteDetailViewModel::class) { savedState: SavedStateHandle ->
-            NoteDetailViewModel(savedState)
-        }
+        rememberViewModel(NoteDetailViewModel::class) { NoteDetailViewModel() }
 
     /**
      * State stored here instead of the VM as the transfer of data was causing
      * poor writing effort in the text fields especially in iOS
      */
 
-    var stateTitle by remember {
-        mutableStateOf("")
-    }
-
-    var stateContent by remember {
-        mutableStateOf("")
-    }
-
     val noteDetailState by viewModel.noteMutableStateFlow.collectAsState()
-
     val isSaved by viewModel.hasNoteBeenSaved.collectAsState()
     val onBackClicked by viewModel.onBackMutableState.collectAsState()
 
+    var stateTitle by remember {
+        mutableStateOf(noteDetailState.title)
+    }
+
+    var stateContent by remember {
+        mutableStateOf(noteDetailState.content)
+    }
+
     LaunchedEffect(Unit) {
         viewModel.getNote(noteId)
+    }
+
+    LaunchedEffect(noteDetailState) {
+        stateTitle = noteDetailState.title
+        stateContent = noteDetailState.content
     }
 
     LaunchedEffect(isSaved, onBackClicked) {
@@ -70,11 +72,16 @@ fun NoteDetailScreen(noteId: Long?, onBack: () -> Unit) {
     }
 
     Scaffold(
+        modifier = modifier,
         floatingActionButton = {
             FloatingActionButton(
                 onClick = {
                     if (!isSaved) {
-                        viewModel.saveNote(noteId, stateTitle, stateContent)
+                        viewModel.saveNote(
+                            noteId = noteId,
+                            title = stateTitle,
+                            content = stateContent,
+                        )
                     }
                 },
                 backgroundColor = Color.Black,
@@ -82,60 +89,64 @@ fun NoteDetailScreen(noteId: Long?, onBack: () -> Unit) {
                 Icon(
                     imageVector = Icons.Default.Check,
                     contentDescription = "Save Note",
-                    tint = Color.White
+                    tint = Color.White,
                 )
             }
         },
         topBar = {
-            TopAppBar(title = { Text("Note Detail") }, navigationIcon = {
-                IconButton(
-                    onClick = {
-                        if (!isSaved) {
-                            viewModel.saveNote(noteId, stateTitle, stateContent)
-                        }
-                    }
-                ) {
-                    Icon(
-                        imageVector = Icons.Filled.ArrowBack,
-                        contentDescription = "Back"
+            TopAppBar(
+                title = { Text("Note Detail") },
+                navigationIcon = {
+                    IconButton(
+                        onClick = {
+                            if (!isSaved) {
+                                viewModel.saveNote(
+                                    noteId = noteId,
+                                    title = stateTitle,
+                                    content = stateContent,
+                                )
+                            }
+                        },
+                        content = {
+                            Icon(
+                                imageVector = Icons.Filled.ArrowBack,
+                                contentDescription = "Back",
+                            )
+                        },
                     )
-                }
-
-            }, backgroundColor = Color.White)
-        }
+                },
+                backgroundColor = Color.White,
+            )
+        },
     ) { padding ->
         Column(
             modifier = Modifier
-                .background(Color(viewModel.getColour(noteId)))
+                .background(Color(noteDetailState.color))
                 .fillMaxSize()
                 .padding(padding)
-                .padding(16.dp)
+                .padding(16.dp),
         ) {
             HeadingTextFieldComponent(
-                text = if (stateTitle.checkNotEmptyOrBlank()) stateTitle else {
-                    stateTitle = noteDetailState.title
-                    noteDetailState.title
-                },
                 hint = "Enter a Title...",
+                value = stateTitle,
                 onValueChanged = {
                     stateTitle = it
                 },
                 isSingleLine = true,
-                textStyle = TextStyle(fontSize = 20.sp)
+                textStyle = TextStyle(fontSize = 20.sp),
             )
+
             Spacer(modifier = Modifier.height(16.dp))
+
             HeadingTextFieldComponent(
-                text = if (stateContent.checkNotEmptyOrBlank()) stateContent else {
-                    stateContent = noteDetailState.content
-                    noteDetailState.content
-                },
+                value = stateContent,
                 hint = "Enter some content...",
                 onValueChanged = {
                     stateContent = it
                 },
                 textStyle = TextStyle(fontSize = 20.sp),
                 modifier = Modifier.weight(1f),
-                isSingleLine = false
+                isSingleLine = false,
             )
         }
     }
