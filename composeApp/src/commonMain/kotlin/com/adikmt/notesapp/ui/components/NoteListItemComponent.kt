@@ -22,6 +22,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.adikmt.notesapp.data.model.NoteDataModel
@@ -54,7 +55,10 @@ fun NoteListItemComponent(
             Text(
                 text = noteDataModel.title,
                 fontWeight = FontWeight.Bold,
-                fontSize = 20.sp
+                fontSize = 20.sp,
+                modifier = Modifier.weight(1f),
+                maxLines = 1,
+                overflow = TextOverflow.Ellipsis
             )
             Icon(
                 imageVector = Icons.Default.Close,
@@ -63,6 +67,7 @@ fun NoteListItemComponent(
                     .clickable(MutableInteractionSource(), null) {
                         onNoteDeleted.invoke()
                     }
+                    .weight(0.3f)
             )
         }
         Spacer(modifier = Modifier.height(16.dp))
@@ -70,7 +75,8 @@ fun NoteListItemComponent(
             text = noteDataModel.content,
             fontWeight = FontWeight.Normal,
             maxLines = maxLines,
-            fontSize = 14.sp
+            fontSize = 14.sp,
+            overflow = TextOverflow.Ellipsis
         )
         Spacer(modifier = Modifier.height(16.dp))
         Text(

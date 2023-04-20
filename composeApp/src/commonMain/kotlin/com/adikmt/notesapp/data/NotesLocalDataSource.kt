@@ -33,6 +33,10 @@ class NotesLocalDataSourceImpl(private val database: NotesDB) : NoteLocalDataSou
     override suspend fun searchNotes(title: String): List<NoteDataModel> {
         return queries.searchNotes(title = title).executeAsList().map { it.toNoteModel() }
     }
+
+    override suspend fun updateNote(id: Long, title: String, content: String, createdAt: Long) {
+        return queries.updateNotes(title = title, content = content, createdat = createdAt, id = id)
+    }
 }
 
 interface NoteLocalDataSource {
@@ -47,4 +51,5 @@ interface NoteLocalDataSource {
 
     suspend fun searchNotes(title: String): List<NoteDataModel>
 
+    suspend fun updateNote(id: Long, title: String, content: String, createdAt: Long)
 }

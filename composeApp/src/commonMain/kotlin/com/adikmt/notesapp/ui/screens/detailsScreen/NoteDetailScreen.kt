@@ -43,7 +43,7 @@ fun NoteDetailScreen(noteId: Long?, onBack: () -> Unit) {
 
     /**
      * State stored here instead of the VM as the transfer of data was causing
-     * poor writing effort in the text fields
+     * poor writing effort in the text fields especially in iOS
      */
 
     var stateTitle by remember {
