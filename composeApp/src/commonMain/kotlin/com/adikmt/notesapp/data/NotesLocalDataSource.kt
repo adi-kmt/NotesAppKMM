@@ -5,7 +5,7 @@ import com.adikmt.notesapp.data.model.NoteDataModel
 import com.adikmt.notesapp.data.model.toNoteModel
 import com.adikmt.notesapp.utils.DateTimeUtil
 
-class NotesLocalDataSourceImpl(database: NotesDB) : NoteLocalDataSource {
+class NotesLocalDataSourceImpl(private val database: NotesDB) : NoteLocalDataSource {
 
     private val queries = database.noteQueries
     override suspend fun insertNote(note: NoteDataModel) {
@@ -14,7 +14,7 @@ class NotesLocalDataSourceImpl(database: NotesDB) : NoteLocalDataSource {
             title = note.title,
             content = note.content,
             color = note.colorHex,
-            created = DateTimeUtil.toEpochMillis(note.createdAt),
+            created = DateTimeUtil.toEpochMillis(note.createdAt)
         )
     }
 
@@ -33,6 +33,10 @@ class NotesLocalDataSourceImpl(database: NotesDB) : NoteLocalDataSource {
     override suspend fun searchNotes(title: String): List<NoteDataModel> {
         return queries.searchNotes(title = title).executeAsList().map { it.toNoteModel() }
     }
+
+    override suspend fun updateNote(id: Long, title: String, content: String, createdAt: Long) {
+        return queries.updateNotes(title = title, content = content, createdat = createdAt, id = id)
+    }
 }
 
 interface NoteLocalDataSource {
@@ -46,4 +50,6 @@ interface NoteLocalDataSource {
     suspend fun deleteNote(id: Long)
 
     suspend fun searchNotes(title: String): List<NoteDataModel>
+
+    suspend fun updateNote(id: Long, title: String, content: String, createdAt: Long)
 }

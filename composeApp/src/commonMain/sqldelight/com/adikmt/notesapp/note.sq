@@ -21,6 +21,13 @@ FROM NoteEntity
 WHERE Title LIKE ("%" || :title)
  OR Title LIKE (:title || "%");
 
+updateNotes:
+UPDATE NoteEntity
+SET Title = :title,
+Content = :content,
+CreatedAt = :createdat
+WHERE Id = :id;
+
 insertNote:
 INSERT OR REPLACE
 INTO NoteEntity(

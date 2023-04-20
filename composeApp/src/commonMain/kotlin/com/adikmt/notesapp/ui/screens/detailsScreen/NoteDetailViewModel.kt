@@ -10,6 +10,7 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import kotlinx.datetime.toInstant
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.get
 
@@ -54,7 +55,14 @@ class NoteDetailViewModel : ViewModel(), KoinComponent {
     ) {
         CoroutineScope(coroutineContext).launch {
             if (title.checkNotEmptyOrBlank()) {
-                noteLocalDataSource.insertNote(
+                noteId?.let {
+                    noteLocalDataSource.updateNote(
+                            id = noteId,
+                            title = title,
+                            content = content,
+                            createdAt = DateTimeUtil.toEpochMillis(DateTimeUtil.now())
+                    )
+                } ?: noteLocalDataSource.insertNote(
                     NoteDataModel(
                         id = noteId,
                         title = title,

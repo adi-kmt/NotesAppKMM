@@ -22,6 +22,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.adikmt.notesapp.data.model.NoteDataModel
@@ -30,10 +31,10 @@ import com.adikmt.notesapp.utils.DateTimeUtil
 @Composable
 fun NoteListItemComponent(
     noteDataModel: NoteDataModel,
-    onNoteClick: () -> Unit,
-    onNoteDeleted: () -> Unit,
-    modifier: Modifier = Modifier,
     maxLines: Int = 5,
+    modifier: Modifier = Modifier,
+    onNoteClick: () -> Unit,
+    onNoteDeleted: () -> Unit
 ) {
     val formattedDate = remember(noteDataModel.createdAt) {
         DateTimeUtil.formatNoteDate(noteDataModel.createdAt)
@@ -44,17 +45,20 @@ fun NoteListItemComponent(
             .clip(RoundedCornerShape(8.dp))
             .background(Color(noteDataModel.colorHex))
             .clickable { onNoteClick.invoke() }
-            .padding(20.dp),
+            .padding(20.dp)
     ) {
         Row(
             horizontalArrangement = Arrangement.SpaceBetween,
             verticalAlignment = Alignment.CenterVertically,
-            modifier = Modifier.fillMaxWidth(),
+            modifier = Modifier.fillMaxWidth()
         ) {
             Text(
                 text = noteDataModel.title,
                 fontWeight = FontWeight.Bold,
                 fontSize = 20.sp,
+                modifier = Modifier.weight(1f),
+                maxLines = 1,
+                overflow = TextOverflow.Ellipsis
             )
             Icon(
                 imageVector = Icons.Default.Close,
@@ -62,7 +66,8 @@ fun NoteListItemComponent(
                 modifier = Modifier
                     .clickable(MutableInteractionSource(), null) {
                         onNoteDeleted.invoke()
-                    },
+                    }
+                    .weight(0.3f)
             )
         }
 
@@ -73,6 +78,7 @@ fun NoteListItemComponent(
             fontWeight = FontWeight.Normal,
             maxLines = maxLines,
             fontSize = 14.sp,
+            overflow = TextOverflow.Ellipsis
         )
 
         Spacer(modifier = Modifier.height(16.dp))
@@ -80,7 +86,7 @@ fun NoteListItemComponent(
         Text(
             text = formattedDate,
             color = Color.DarkGray,
-            modifier = Modifier.align(Alignment.End),
+            modifier = Modifier.align(Alignment.End)
         )
     }
 }

@@ -41,7 +41,7 @@ fun NoteDetailScreen(
 
     /**
      * State stored here instead of the VM as the transfer of data was causing
-     * poor writing effort in the text fields
+     * poor writing effort in the text fields especially in iOS
      */
 
     val noteDetailState by viewModel.noteMutableStateFlow.collectAsState()

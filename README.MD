@@ -20,7 +20,7 @@ Don't rebuild the project
 
 Instead just run only the sqldelight tasks from the gradle tab 
  -  generateCommonMainNotesDBInterface
- - generateSqlDelightInterface
+ - generateSqlDelightInterface <br>
 (Can also run the verify tasks for good measure.)
 
 ### Android
@@ -36,9 +36,9 @@ Run the desktop application: `./gradlew :composeApp:run`
 
 ### iOS
 To run the application on iPhone device/simulator:
- - Add linker flags for SQL delight as `-lsqlite3` in Xcode under other linker flags.
+ - Add linker flags for SQL delight as `-lsqlite3` in Xcode under other linker flags. (Only if sqlite error shows)
  - Open `iosApp/iosApp.xcworkspace` in Xcode and run standard configuration.
-
+ - Or can also be run using the KMM Jetbrains plugin that can be readily downloaded from the plugins marketplace.
 ## 🏗️️ Built with ❤️ using Kotlin
 | What            | How                                                                       |
 |-----------------|---------------------------------------------------------------------------|
