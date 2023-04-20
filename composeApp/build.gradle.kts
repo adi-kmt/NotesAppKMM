@@ -65,7 +65,6 @@ kotlin {
                 implementation(libs.essenty.parcelable)
                 api(libs.decompose)
                 implementation(libs.decompose.compose.multiplatform)
-//                implementation(libs.decompose.extensions)
             }
         }
 
